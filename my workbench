@@ -1,0 +1,142 @@
+USE ALEXAMARA;
+SELECT * FROM marina;
+SELECT * FROM marina_slip;
+SELECT * FROM owner;
+SELECT * FROM service_category;
+SELECT * FROM service_request;
+
+SELECT MAX(RENTAL_FEE) AS MAXIMUM FROM marina_slip;
+
+SELECT MIN(RENTAL_FEE) AS MINIMUN FROM marina_slip;
+
+SELECT COUNT(RENTAL_FEE) AS TODAYCOUNT FROM marina_slip;
+
+SELECT SUM(RENTAL_FEE) AS TODAY FROM marina_slip;
+
+SELECT AVG(LENGTH) AS AVERAGE FROM marina_slip;
+
+SELECT DISTINCT(MARINA_NUM) AS UNIQUE_MARINANUM FROM marina_slip;
+
+SELECT BOAT_NAME, BOAT_TYPE FROM marina_slip
+ORDER BY BOAT_NAME;
+
+SELECT DESCRIPTION FROM service_request
+WHERE DESCRIPTION LIKE '% diagnose %'; 
+
+SELECT * FROM SERVICE_REQUEST
+WHERE SLIP_ID BETWEEN 1 AND 3;
+
+
+use alexamara;
+
+CREATE TABLE MARINA(
+`MARINA_NUM` CHAR(4) NOT null, 
+`NAME` CHAR(20) NULL, 
+`ADDRESS` CHAR(15) NULL, 
+`CITY` CHAR(15) NULL, 
+`STATE` CHAR(2) NULL, 
+`ZIP` CHAR(5) NULL,
+primary key(`MARINA_NUM`)
+);
+
+CREATE TABLE MARINA_SLIP (
+`SLIP_ID` DECIMAL(4.0) NOT NULL, 
+`MARINA_NUM` CHAR(4) NULL, 
+`SLIP_NUM` CHAR(4) NULL, 
+`LENGTH` DECIMAL(4.0) NULL, 
+`RENTAL_FEE` DECIMAL(6.2) NULL,
+`BOAT_NAME` CHAR(50) NULL,
+`BOAT_TYPE` CHAR(50) NULL,
+`OWNER_NUM` CHAR(4) NULL,
+primary key(`SLIP_ID`)
+);
+
+CREATE TABLE OWNER (
+`OWNER_NUM` CHAR(4) NOT NULL,
+`LAST_NAME` CHAR(50) NULL,
+`FIRST_NAME` CHAR(20) NULL,
+`ADDRESS` CHAR(15) NULL,
+`CITY` CHAR(15) NULL,
+`STATE` CHAR(2) NULL,
+`ZIP` CHAR(5) NULL,
+primary key(`OWNER_NUM`)
+);
+
+CREATE TABLE service_category (
+`CATEGORY_NUM` decimal(4.0) NOT NULL,
+`CATEGORY_DESCRIPTION` CHAR(255) NULL,
+primary key(`CATEGORY_NUM`)
+);
+
+CREATE TABLE SERVICE_REQUEST (
+`SERVICE_ID` DECIMAL(4.0) NOT NULL,
+`SLIP_ID` DECIMAL(4.0) NULL,
+`CATEGORY_NUM` DECIMAL(4.0) NULL,
+`DESCRIPTION` CHAR(255) NULL,
+`STATUS` CHAR(255) NULL,
+`EST_HOURS` DECIMAL(4.2) NULL,
+`SPENT_HOURS` DECIMAL(4.2) NULL,
+`NEXT_SERVICE_DATE` DATE NULL,
+primary key(`SERVICE_ID`)
+);
+
+INSERT INTO marina(MARINA_NUM, NAME, ADDRESS, CITY, STATE, ZIP)VALUES
+(1, "Alexamara East", "108 2nd Ave.", "Brinman", "FL", "32273"),
+(2, "Alexamara Central", "283 Branston", "W.Brinman", "FL", "32274");
+SELECT * FROM marina;
+
+INSERT INTO marina_slip(SLIP_ID, MARINA_NUM, SLIP_NUM, LENGTH, RENTAL_FEE, BOAT_NAME, BOAT_TYPE, OWNER_NUM)VALUES
+(1, "1", "A1", 40, 3800.00, "Anderson II", "Sprite 4000", "AN75"),
+(2, "1", "A2", 40, 3800.00, "Our Toy", "Ray 4025", "EL25"),
+(3, "1", "A3", 40, 3600.00, "Escape", "Sprite 4000", "KE22"),
+(4, "1", "B1", 30, 2400.00, "Gypst", "Dolphin 28", "JU92"),
+(5, "1", "B2", 30, 2600.00, "Anderson III", "Sprite 3000", "AN75"),
+(6, "2", "1", 25, 1800.00, "Bravo", "Dolphin 25", "AD57"),
+(7, "2", "2", 25, 1800.00, "Chinook", "Dolphin 22", "FE82"),
+(8, "2", "3", 25, 2000.00, "Listy", "Dolphin 25", "SM72"),
+(9, "2", "4", 30, 2500.00, "Mermaid", "Dolphin 28", "BL72"),
+(10, "2", "5", 40, 4200.00, "Axxon II", "Dolphin 40", "NO27"),
+(11, "2", "6", 40, 4200.00, "Karvel", "Ray 4025", "TR72");
+SELECT * FROM marina_slip;
+
+INSERT INTO owner(OWNER_NUM, LAST_NAME, FIRST_NAME, ADDRESS, CITY, STATE, ZIP)VALUES
+("AD57", "Adney", "Bruce and Jean", "208 citrus", "Bowton", "FL" , 31313), 
+("AN75", "Anderson", "Bill", "18 wilcox","Glander Bay","FL",31044),
+("BL72", "Blake", "Mary", "2672 Commodore", "Bowton", "FL", 31313),
+("EL25", "Elend", "Sandy and Bill", "462 Riverside", "Rivard", "FL", 31062),
+("FE82", "Feenstra", "Daniel", "7822 Coventry", "Kaleva", "FL", 32521),
+("JU92", "Juarez", "Maria", "8922 Oak", "Rivard", "FL", 31062),
+("KE22", "Kelly", "Alyssa", "5241 Waters", "Bowton", "FL", 31313),
+("NO27", "Norton", "Peter", "2811 Lakewood", "Lewiston", "FL", 32765),
+("SM72", "Smeltz", "Becky and Dave", "922 Garland", "Glander Bay", "FL", 31044),
+("TR72", "Trent", "Ashton", "922 Crest", "Bay Shores", "FL", 30992);
+SELECT * FROM owner;
+
+INSERT INTO service_category(CATEGORY_NUM, CATEGORY_DESCRIPTION)VALUES
+(1, "Routine engine maintenane"),
+(2, "Engine repair"),
+(3, "Air conditioning"),
+(4, "Electrical systems"),
+(5, "Fiberglass repair"),
+(6, "Canvas installation"),
+(7, "Canvas repair"),
+(8, "Electronice systems(radar, GPS, autopilots, etc.)");
+SELECT * FROM service_category;
+
+INSERT INTO service_request(SERVICE_ID, SLIP_ID, CATEGORY_NUM, DESCRIPTION, STATUS, EST_HOURS, SPENT_HOURS, NEXT_SERVICE_DATE)VALUES
+(1, 1, 3, "Air conditioner periodically stops with code indicating low coolant level. Diagnose and repair", "Technician has verified the problem. Air conditioning specialist has been called", 4.00, 2.00, '2007-07-12'),
+(2, 5, 4, "Fuse on port motor blown on two occasions. Diagnose and repar.", "Open", 2.00, 0.00, '2007-07-12'),
+(3, 4, 1, "Oil change and general routine maintenance (check fluid levels, clean sea strainers etc.).", "Service call has been scheduled.", 1.00, 0.00, '2007-07-16'),
+(4, 1, 2, "Engine oil level has been dropping drastically. Diagnose and repair.", "Open", 2.00, 0.00, '2007-07-13'),
+(5, 3, 5, "Open pockets at base of two stantions.", "Technicain has completed the initial filling of the open pockers. Will complete the job after t...", 4.00, 2.00, '2007-07-13'),
+(6, 11, 4, "Electric-flush system periodically stops functioning. Diagnose and repair.", "Open", 3.00, 0.00, '2010-12-31'),
+(7, 6, 2, "Engine overheating. Loss of coolant. Diagnose and repair.", "Open", 2.00, 0.00, '2007-07-13'),
+(8, 6, 2, "Heat exchanger not operating correctly.", "Technician has determined that the exchanger is faulty. New exchanger has been ordered.", 4.00, 1.00, '2007-07-17'),
+(9, 7, 6, "Canvas severely damaged in windstorm. Order and install new canvas", "Open", 8.00, 0.00, '2007-07-16'),
+(10, 2, 8, "Intall new GPS and chart plotter.", "Schedules", 7.00, 0.00, '2007-07-17'),
+(11, 2, 3, "Air conditioning unit shuts down with HHH showing on the control panel.", "Technician not able to replicate the problem. Air conditioning unit ran fire through multiple t...", 1.00, 1.00, '2010-12-31'),
+(12, 4, 8, "Both speed and depth readings on data unit are significantly less than  the owner thinks they should be.", "Technician has scheduled appointment with the owner to attempt to verify the problem.", 2.00, 0.00, '2007-07-16'),
+(13, 8, 2, "Customer describes engine as making a clattering sound.", "Technician suspects  problem with either propellor or shaft  and  has scheduled the boat to b...", 5.00, 2.00, '2007-07-12'),
+(14, 7, 5, "Owner accident caused bamage to forward portion of port side.", "Technician has scheduled repair.", 6.00, 0.00, '2007-07-13'),
+(15, 11, 7, "Canvas leaks around zippers in heavy rain. Install overlap around zippers to prevent leaks", "Overlap has been created. Installation has been scheduled.", 8.00, 3.00, '2007-07-17');
+SELECT * FROM service_request;
