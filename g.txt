@@ -1,0 +1,24 @@
+create schema alexamara;
+use alexamara;
+
+CREATE TABLE vehicles
+(license VARCHAR(10), 
+make VARCHAR(25), 
+model VARCHAR(50), 
+miles FLOAT,
+assigned_to VARCHAR(40));
+
+ALTER TABLE vehicles ADD COLUMN (model_year INT);
+
+ALTER TABLE vehicles CHANGE COLUMN miles mileage float;
+
+ALTER TABLE vehicles MODIFY COLUMN model_year SMALLINT;
+
+ALTER TABLE vehicles RENAME TO company_cars;
+
+ALTER TABLE company_cars DROP COLUMN assigned_to;
+
+DROP TABLE company_cars;
+
+INSERT INTO company_cars(license, model_year, make, model, mileage)VALUES('CK-2987', 2009, 'Toyota', 'Corolla', 3508.4);
+
